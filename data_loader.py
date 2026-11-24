@@ -13,7 +13,12 @@ UNIVERS={'SPY'      : 'Equity US',
     'HYG'      : 'HY US',
     'IHYG.L'   : 'HY EU',}
 
-def load_data(start='2019-01-01',end='2024-12-31'):
+def load_data(start=None,end=None):
+   if end is None:
+       end=pd.Timestamp.today().normalize()
+   if start is None:
+       start=end-pd.DateOffset(years=5)
+   
    tickers=list(UNIVERS.keys())
    raw=yf.download(tickers,start,end,auto_adjust=True,progress=False)['Close']
    prix=raw.ffill().dropna()
